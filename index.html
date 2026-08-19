@@ -291,6 +291,83 @@
     padding-left: 12px;
   }
 
+  /* ---------- Features / spec list ---------- */
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .spec-grid-2x2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 720px) {
+    .spec-grid { grid-template-columns: 1fr; }
+  }
+
+  .spec-group {
+    margin-bottom: 28px;
+  }
+
+  .spec-grid .spec-group {
+    margin-bottom: 0;
+  }
+
+  .spec-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .spec-group-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .spec-list {
+    list-style: none;
+  }
+
+  .spec-list li {
+    position: relative;
+    padding-left: 20px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .spec-list li:last-child {
+    margin-bottom: 0;
+  }
+
+  .spec-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent-dim);
+    font-family: var(--mono);
+  }
+
+  .spec-sublist {
+    list-style: none;
+    margin-top: 8px;
+  }
+
+  .spec-sublist li {
+    padding-left: 18px;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+
+  .spec-sublist li::before {
+    content: '–';
+    color: var(--line-bright);
+  }
+
   /* ---------- 3D render (two stacked page images) ---------- */
   .render-stack {
     display: flex;
@@ -498,6 +575,174 @@
     border-radius: 0;
   }
 
+  /* ---------- Design challenge blocks ---------- */
+  .challenge-block {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+
+  .challenge-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .challenge-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .challenge-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .challenge-constraint .challenge-label { color: var(--text-dim); }
+  .challenge-constraint .challenge-label::before { background: var(--text-dim); }
+
+  .challenge-problem .challenge-label { color: var(--signal); }
+  .challenge-problem .challenge-label::before {
+    background: var(--signal);
+    box-shadow: 0 0 8px var(--signal);
+  }
+
+  .challenge-solution .challenge-label { color: var(--accent); }
+  .challenge-solution .challenge-label::before {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .challenge-block p {
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .challenge-block p:last-child { margin-bottom: 0; }
+
+  .challenge-block ul {
+    list-style: none;
+  }
+
+  .challenge-block ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .challenge-block ul li:last-child { margin-bottom: 0; }
+
+  .challenge-block ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    font-family: var(--mono);
+    color: var(--accent-dim);
+  }
+
+  .challenge-tradeoff {
+    margin-top: 18px;
+    padding-left: 14px;
+    border-left: 2px solid var(--line-bright);
+    font-size: 0.92rem;
+    color: var(--text-dim);
+  }
+
+  .challenge-tradeoff strong {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* ---------- Board stackup ---------- */
+  .stackup-stats {
+    display: flex;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .stackup-stat {
+    flex: 1;
+    background: var(--bg-raised);
+    padding: 24px 28px;
+    text-align: center;
+  }
+
+  .stackup-stat .k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .stackup-stat .v {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stackup-stat .v small {
+    font-size: 1rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  .stackup-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 720px) {
+    .stackup-cards { grid-template-columns: 1fr; }
+    .stackup-stats { flex-direction: column; }
+  }
+
+  .stackup-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px 20px;
+  }
+
+  .stackup-card .title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+  }
+
+  .stackup-card .desc {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
   /* ---------- Downloads / resources section ---------- */
   .res-grid {
     display: grid;
@@ -572,10 +817,12 @@
 
 <nav class="rail" aria-label="Section navigation">
   <div class="rail-track">
-    <a class="rail-item" href="#overview">Overview</a>
     <a class="rail-item" href="#render">3D Render</a>
-    <a class="rail-item" href="#schematic">Schematic</a>
+    <a class="rail-item" href="#features">Features</a>
+    <a class="rail-item" href="#challenges">Design Challenges</a>
     <a class="rail-item" href="#fabrication">Fab Drawing</a>
+    <a class="rail-item" href="#stackup">Board Stackup</a>
+    <a class="rail-item" href="#schematic">Schematic</a>
     <a class="rail-item" href="#resources">Project Files</a>
   </div>
 </nav>
@@ -606,21 +853,9 @@
     </div>
   </section>
 
-  <section id="overview">
-    <div class="section-head">
-      <span class="section-num">01</span>
-      <h2>Overview</h2>
-    </div>
-    <div class="section-rule"></div>
-    <div class="readme-body">
-      <p>Satellite modem with integrated GPS module. Communication over RS-232 interface.</p>
-      <p>Optimized for open ocean buoy data uplink.</p>
-    </div>
-  </section>
-
   <section id="render">
     <div class="section-head">
-      <span class="section-num">02</span>
+      <span class="section-num">01</span>
       <h2>Board Render</h2>
     </div>
     <div class="section-rule"></div>
@@ -646,9 +881,144 @@
     </div>
   </section>
 
-  <section id="schematic">
+  <section id="features">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Features</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="readme-body">
+      <div class="spec-grid spec-grid-2x2">
+        <div class="spec-group">
+          <div class="spec-group-title">Power</div>
+          <ul class="spec-list">
+            <li>Wide input voltage range (5 – 20 V)</li>
+            <li>Jumpers to selectively disable devices for low-power operation</li>
+          </ul>
+        </div>
+        <div class="spec-group">
+          <div class="spec-group-title">Peripherals</div>
+          <ul class="spec-list">
+            <li>Dual RS-232 ports for parallel communication and position data</li>
+          </ul>
+        </div>
+        <div class="spec-group">
+          <div class="spec-group-title">Satellite Module</div>
+          <ul class="spec-list">
+            <li>Iridium Core 9523N
+              <ul class="spec-sublist">
+                <li>RUDICS | SBD protocol</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="spec-group">
+          <div class="spec-group-title">GNSS Module</div>
+          <ul class="spec-list">
+            <li>Quectel L96-M33
+              <ul class="spec-sublist">
+                <li>Multi-constellation tracking</li>
+                <li>Flash memory</li>
+                <li>LNA</li>
+              </ul>
+            </li>
+            <li>Cold start &lt; 45 s | warm start &lt; 20 s</li>
+            <li>Active or passive GPS antenna</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="challenges">
     <div class="section-head">
       <span class="section-num">03</span>
+      <h2>Design Challenges</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <div class="challenge-block challenge-constraint">
+      <div class="challenge-label">Mechanical Constraint</div>
+      <p>Board must mount to a metal chassis housed inside a vacuum-sealed pressure vessel. This must withstand subsurface pressure at 100 m to survive initial buoy deployment.</p>
+    </div>
+
+    <div class="challenge-block challenge-problem">
+      <div class="challenge-label">RF Problem</div>
+      <ul>
+        <li><strong>Interference:</strong> Pressure vessel diameter &lt; λ/2 results in antenna coupling and RF power leakage into GNSS front-end.</li>
+        <li><strong>Directionality:</strong> Unpredictable wave motion means antenna orientation changes constantly.</li>
+      </ul>
+    </div>
+
+    <div class="challenge-block challenge-problem">
+      <div class="challenge-label">Thermal Problem</div>
+      <ul>
+        <li><strong>Heat dissipation:</strong> Vacuum-sealed means heat will only transfer radiatively. During tropical buoy deployments with long uplink connect times, there is a risk of exceeding the Iridium module's max operational temperature.</li>
+      </ul>
+    </div>
+
+    <div class="challenge-block challenge-solution">
+      <div class="challenge-label">Solutions</div>
+      <ul>
+        <li><strong>RF switch:</strong> Protects GNSS front-end during Iridium transmission with 12 dB isolation between the external antenna and module. Low insertion loss of 0.7 dB ensures a passive antenna is still compatible with the system.</li>
+        <li><strong>Vertical wide-beamwidth antennas:</strong> The side-lobe gain at the maximum tilt expected on deployed buoys is sufficient to close the link budget for both GNSS and Iridium. Antennas are mounted side-by-side on SMA bulkheads for easy installation.</li>
+        <li><strong>Thermal strap:</strong> Copper pads with exposed soldermask were added to the top and bottom layers. Vias transfer heat from all layers to these pads, placed near the highest-power regulator and the Iridium module — the two components expected to dissipate the most heat.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="fabrication">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Fabrication Drawing</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="doc-frame-full" id="fab-pages">
+      <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
+    </div>
+    <div class="render-caption">
+      <span>Iridium_Modem_SIO_Fabrication_Drawing.pdf</span>
+      <span><a class="full-size-link" href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Fabrication Drawing →</a></span>
+    </div>
+  </section>
+
+  <section id="stackup">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>Board Stackup</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <div class="stackup-stats">
+      <div class="stackup-stat">
+        <span class="k">Layers</span>
+        <span class="v">4</span>
+      </div>
+      <div class="stackup-stat">
+        <span class="k">Thickness</span>
+        <span class="v">1.6<small>mm</small></span>
+      </div>
+    </div>
+
+    <div class="stackup-cards">
+      <div class="stackup-card">
+        <div class="title">ENIG Finish</div>
+        <div class="desc">Optimal heat transfer between flush-mounted Iridium module and thermal strap</div>
+      </div>
+      <div class="stackup-card">
+        <div class="title">Full-Layer Copper Pour</div>
+        <div class="desc">Ground plane spanning all layers for reduced EMI</div>
+      </div>
+      <div class="stackup-card">
+        <div class="title">Controlled-Impedance CPW</div>
+        <div class="desc">Embedded 50-ohm coplanar waveguide for GNSS module antenna feed</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="schematic">
+    <div class="section-head">
+      <span class="section-num">06</span>
       <h2>Schematic</h2>
     </div>
     <div class="section-rule"></div>
@@ -679,35 +1049,9 @@
     </div>
   </section>
 
-  <section id="fabrication">
-    <div class="section-head">
-      <span class="section-num">04</span>
-      <h2>Fabrication Drawing</h2>
-    </div>
-    <div class="section-rule"></div>
-    <div class="doc-frame-full" id="fab-pages">
-      <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
-    </div>
-    <div class="render-caption">
-      <span>Iridium_Modem_SIO_Fabrication_Drawing.pdf</span>
-      <span><a class="full-size-link" href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Fabrication Drawing →</a></span>
-    </div>
-    <div class="doc-notes doc-notes-below">
-      <h3>Feature notes</h3>
-      <div class="note-slot placeholder">
-        <span class="tag">Board outline</span>
-        Add notes on overall dimensions and mounting here.
-      </div>
-      <div class="note-slot placeholder">
-        <span class="tag">Enclosure fit</span>
-        Add notes on clearance and enclosure compatibility here.
-      </div>
-    </div>
-  </section>
-
   <section id="resources">
     <div class="section-head">
-      <span class="section-num">05</span>
+      <span class="section-num">07</span>
       <h2>Project Files</h2>
     </div>
     <div class="section-rule"></div>
