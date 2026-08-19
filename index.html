@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
   :root {
     --bg: #12181C;
@@ -394,6 +395,42 @@
 
   .doc-fallback a { color: var(--accent); }
 
+  .pdf-loading {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .pdf-page-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: #fff;
+  }
+
+  .pdf-page-canvas:last-child { margin-bottom: 0; }
+
+  .render-frame .pdf-page-canvas {
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  .render-frame {
+    padding: 16px;
+  }
+
   /* ---------- Downloads / resources section ---------- */
   .res-grid {
     display: grid;
@@ -518,13 +555,8 @@
     </div>
     <div class="section-rule"></div>
     <p class="section-intro">Full-board render. Add feature callouts alongside as the design is annotated.</p>
-    <div class="render-frame">
-      <object data="Iridium_Modem_3D_Render.pdf" type="application/pdf">
-        <div class="doc-fallback">
-          3D render preview unavailable in this browser.<br>
-          <a href="Iridium_Modem_3D_Render.pdf" target="_blank" rel="noopener">Open Iridium_Modem_3D_Render.pdf directly →</a>
-        </div>
-      </object>
+    <div class="render-frame" id="render-frame">
+      <div class="pdf-loading" data-loading-for="render-frame">Loading render…</div>
     </div>
     <div class="render-caption">
       <span>Iridium_Modem_3D_Render.pdf</span>
@@ -542,13 +574,8 @@
     <div class="doc-layout">
       <div class="doc-scroll">
         <div class="doc-scroll-hint">Scroll to view full schematic ↓</div>
-        <div class="doc-scroll-inner">
-          <object data="Iridium_Modem_Schematic.pdf" type="application/pdf" width="100%">
-            <div class="doc-fallback">
-              Schematic preview unavailable in this browser.<br>
-              <a href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener">Open Iridium_Modem_Schematic.pdf directly →</a>
-            </div>
-          </object>
+        <div class="doc-scroll-inner" id="schematic-pages">
+          <div class="pdf-loading" data-loading-for="schematic-pages">Loading schematic…</div>
         </div>
       </div>
       <div class="doc-notes">
@@ -579,13 +606,8 @@
     <div class="doc-layout">
       <div class="doc-scroll">
         <div class="doc-scroll-hint">Scroll to view full drawing ↓</div>
-        <div class="doc-scroll-inner">
-          <object data="Iridium_Modem_SIO_Fabrication_Drawing.pdf" type="application/pdf" width="100%">
-            <div class="doc-fallback">
-              Fabrication drawing preview unavailable in this browser.<br>
-              <a href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener">Open Iridium_Modem_SIO_Fabrication_Drawing.pdf directly →</a>
-            </div>
-          </object>
+        <div class="doc-scroll-inner" id="fab-pages">
+          <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
         </div>
       </div>
       <div class="doc-notes">
@@ -641,6 +663,49 @@
 </main>
 
 <script>
+  // ---------- PDF.js rendering ----------
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  async function renderPdfIntoContainer(url, containerId, options = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const { singlePage = false, targetWidth = 1400 } = options;
+
+    try {
+      const loadingTask = pdfjsLib.getDocument(url);
+      const pdf = await loadingTask.promise;
+      container.innerHTML = '';
+
+      const pageCount = singlePage ? 1 : pdf.numPages;
+
+      for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const baseViewport = page.getViewport({ scale: 1 });
+        const scale = targetWidth / baseViewport.width;
+        const viewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'pdf-page-canvas';
+        const context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        container.appendChild(canvas);
+      }
+    } catch (err) {
+      console.error('PDF render failed for', containerId, err);
+      container.innerHTML = `<div class="doc-fallback">
+          Preview unavailable in this browser.<br>
+          <a href="${url}" target="_blank" rel="noopener">Open ${url} directly →</a>
+        </div>`;
+    }
+  }
+
+  renderPdfIntoContainer('Iridium_Modem_3D_Render.pdf', 'render-frame', { singlePage: true, targetWidth: 1600 });
+  renderPdfIntoContainer('Iridium_Modem_Schematic.pdf', 'schematic-pages', { targetWidth: 1600 });
+  renderPdfIntoContainer('Iridium_Modem_SIO_Fabrication_Drawing.pdf', 'fab-pages', { targetWidth: 1600 });
+
   // Highlight active rail item on scroll
   const sections = document.querySelectorAll('main section[id]');
   const railItems = document.querySelectorAll('.rail-item');
