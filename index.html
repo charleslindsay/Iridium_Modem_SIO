@@ -264,11 +264,15 @@
     padding-left: 12px;
   }
 
-  /* ---------- 3D render (no-scroll, contained viewport) ---------- */
+  /* ---------- 3D render (two stacked page images) ---------- */
+  .render-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
   .render-frame {
     position: relative;
-    height: 640px;
-    max-height: 75vh;
     background: var(--bg-raised);
     border: 1px solid var(--line);
     border-radius: 6px;
@@ -276,6 +280,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 16px;
   }
 
   .render-frame::after {
@@ -417,18 +422,11 @@
   .pdf-page-canvas:last-child { margin-bottom: 0; }
 
   .render-frame .pdf-page-canvas {
-    width: auto;
-    max-width: 100%;
-    height: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    width: 100%;
+    height: auto;
     margin-bottom: 0;
     border: none;
     border-radius: 0;
-  }
-
-  .render-frame {
-    padding: 16px;
   }
 
   /* ---------- Downloads / resources section ---------- */
@@ -555,12 +553,25 @@
     </div>
     <div class="section-rule"></div>
     <p class="section-intro">Full-board render. Add feature callouts alongside as the design is annotated.</p>
-    <div class="render-frame" id="render-frame">
-      <div class="pdf-loading" data-loading-for="render-frame">Loading render…</div>
-    </div>
-    <div class="render-caption">
-      <span>Iridium_Modem_3D_Render.pdf</span>
-      <span><a href="Iridium_Modem_3D_Render.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
+    <div class="render-stack">
+      <div>
+        <div class="render-frame" id="render-frame-1">
+          <div class="pdf-loading" data-loading-for="render-frame-1">Loading render — page 1…</div>
+        </div>
+        <div class="render-caption">
+          <span>Iridium_Modem_3D_Render.pdf — page 1</span>
+          <span><a href="Iridium_Modem_3D_Render.pdf#page=1" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
+        </div>
+      </div>
+      <div>
+        <div class="render-frame" id="render-frame-2">
+          <div class="pdf-loading" data-loading-for="render-frame-2">Loading render — page 2…</div>
+        </div>
+        <div class="render-caption">
+          <span>Iridium_Modem_3D_Render.pdf — page 2</span>
+          <span><a href="Iridium_Modem_3D_Render.pdf#page=2" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -669,16 +680,17 @@
   async function renderPdfIntoContainer(url, containerId, options = {}) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    const { singlePage = false, targetWidth = 1400 } = options;
+    const { singlePage = false, onlyPage = null, targetWidth = 1400 } = options;
 
     try {
       const loadingTask = pdfjsLib.getDocument(url);
       const pdf = await loadingTask.promise;
       container.innerHTML = '';
 
-      const pageCount = singlePage ? 1 : pdf.numPages;
+      const startPage = onlyPage || 1;
+      const endPage = onlyPage ? onlyPage : (singlePage ? 1 : pdf.numPages);
 
-      for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+      for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
         const page = await pdf.getPage(pageNum);
         const baseViewport = page.getViewport({ scale: 1 });
         const scale = targetWidth / baseViewport.width;
@@ -702,7 +714,8 @@
     }
   }
 
-  renderPdfIntoContainer('Iridium_Modem_3D_Render.pdf', 'render-frame', { singlePage: true, targetWidth: 1600 });
+  renderPdfIntoContainer('Iridium_Modem_3D_Render.pdf', 'render-frame-1', { onlyPage: 1, targetWidth: 1600 });
+  renderPdfIntoContainer('Iridium_Modem_3D_Render.pdf', 'render-frame-2', { onlyPage: 2, targetWidth: 1600 });
   renderPdfIntoContainer('Iridium_Modem_Schematic.pdf', 'schematic-pages', { targetWidth: 1600 });
   renderPdfIntoContainer('Iridium_Modem_SIO_Fabrication_Drawing.pdf', 'fab-pages', { targetWidth: 1600 });
 
