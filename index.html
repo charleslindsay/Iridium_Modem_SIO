@@ -15,10 +15,10 @@
     --line: #263038;
     --line-bright: #37444E;
     --accent: #7FDBDA;
-    --accent-dim: #4E8C8B;
+    --accent-dim: #6FBFBD;
     --signal: #E8A33D;
     --text: #E8E6E0;
-    --text-dim: #8A9199;
+    --text-dim: #A9B0B8;
     --mono: 'JetBrains Mono', monospace;
     --sans: 'Inter', sans-serif;
   }
@@ -223,7 +223,7 @@
 
   .hero-meta-item .k {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-dim);
@@ -507,7 +507,7 @@
 
   .doc-notes h3 {
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 15px;
     letter-spacing: 0.04em;
     color: var(--signal);
     text-transform: uppercase;
@@ -520,12 +520,13 @@
     margin-bottom: 20px;
     color: var(--text-dim);
     font-size: 0.95rem;
+    opacity: 1;
   }
 
   .note-slot .tag {
     display: block;
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 12px;
     color: var(--accent-dim);
     margin-bottom: 4px;
     letter-spacing: 0.05em;
@@ -533,7 +534,6 @@
 
   .note-slot.placeholder {
     font-style: italic;
-    opacity: 0.7;
   }
 
   .doc-fallback {
@@ -590,7 +590,7 @@
 
   .challenge-label {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 14px;
@@ -687,7 +687,7 @@
 
   .stackup-stat .k {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-dim);
@@ -730,7 +730,7 @@
 
   .stackup-card .title {
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 8px;
@@ -738,9 +738,38 @@
   }
 
   .stackup-card .desc {
-    font-size: 0.9rem;
+    font-size: 0.96rem;
     color: var(--text-dim);
     line-height: 1.55;
+  }
+
+  /* ---------- Photo gallery (buoy + assembled photos) ---------- */
+  .photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .photo-gallery-main {
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+  }
+
+  .photo-gallery-main img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 720px) {
+    .photo-gallery { grid-template-columns: 1fr; }
+    .photo-gallery-main { aspect-ratio: 4 / 3; }
   }
 
   /* ---------- Downloads / resources section ---------- */
@@ -817,6 +846,7 @@
 
 <nav class="rail" aria-label="Section navigation">
   <div class="rail-track">
+    <a class="rail-item" href="#gallery">In the Field</a>
     <a class="rail-item" href="#render">3D Render</a>
     <a class="rail-item" href="#features">Features</a>
     <a class="rail-item" href="#challenges">Design Challenges</a>
@@ -853,9 +883,28 @@
     </div>
   </section>
 
-  <section id="render">
+  <section id="gallery">
     <div class="section-head">
       <span class="section-num">01</span>
+      <h2>In the Field</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="photo-gallery">
+      <div class="photo-gallery-main">
+        <img src="iridium_modem_on_buoy.png" alt="Iridium Modem SIO installed on ocean buoy" loading="lazy">
+      </div>
+      <div class="photo-gallery-main">
+        <img src="iridium_modem_assembled_front.jpg" alt="Assembled Iridium Modem SIO, front view" loading="lazy">
+      </div>
+      <div class="photo-gallery-main">
+        <img src="iridium_modem_assmebled_side.jpg" alt="Assembled Iridium Modem SIO, side view" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <section id="render">
+    <div class="section-head">
+      <span class="section-num">02</span>
       <h2>Board Render</h2>
     </div>
     <div class="section-rule"></div>
@@ -883,7 +932,7 @@
 
   <section id="features">
     <div class="section-head">
-      <span class="section-num">02</span>
+      <span class="section-num">03</span>
       <h2>Features</h2>
     </div>
     <div class="section-rule"></div>
@@ -932,7 +981,7 @@
 
   <section id="challenges">
     <div class="section-head">
-      <span class="section-num">03</span>
+      <span class="section-num">04</span>
       <h2>Design Challenges</h2>
     </div>
     <div class="section-rule"></div>
@@ -969,7 +1018,7 @@
 
   <section id="fabrication">
     <div class="section-head">
-      <span class="section-num">04</span>
+      <span class="section-num">05</span>
       <h2>Fabrication Drawing</h2>
     </div>
     <div class="section-rule"></div>
@@ -984,7 +1033,7 @@
 
   <section id="stackup">
     <div class="section-head">
-      <span class="section-num">05</span>
+      <span class="section-num">06</span>
       <h2>Board Stackup</h2>
     </div>
     <div class="section-rule"></div>
@@ -1018,7 +1067,7 @@
 
   <section id="schematic">
     <div class="section-head">
-      <span class="section-num">06</span>
+      <span class="section-num">07</span>
       <h2>Schematic</h2>
     </div>
     <div class="section-rule"></div>
@@ -1036,22 +1085,22 @@
       <h3>Feature notes</h3>
       <div class="note-slot placeholder">
         <span class="tag">Power stage</span>
-        Add notes on the power supply and regulation circuitry here.
+        TPS79330 LDO filters ADP2300 DC-DC converter output to isolate digital 3.3 V power rail from analog 3.0 V power
       </div>
       <div class="note-slot placeholder">
-        <span class="tag">GPS front end</span>
-        Add notes on the GPS module integration here.
+        <span class="tag">GNSS front-end</span>
+        HMC550AETR RF switch protects L96-M33 front-end during Iridium transmission
       </div>
       <div class="note-slot placeholder">
-        <span class="tag">RS-232 interface</span>
-        Add notes on the serial interface and level shifting here.
+        <span class="tag">Antenna feed</span>
+        R14, C26, and C27 form a π-network that can be tuned to match antenna and front-end impedance
       </div>
     </div>
   </section>
 
   <section id="resources">
     <div class="section-head">
-      <span class="section-num">07</span>
+      <span class="section-num">08</span>
       <h2>Project Files</h2>
     </div>
     <div class="section-rule"></div>
