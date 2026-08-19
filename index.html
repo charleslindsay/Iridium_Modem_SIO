@@ -767,18 +767,30 @@
     object-fit: cover;
   }
 
-  .photo-gallery-pair {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  /* ---------- Assembly (rotated photos, stacked) ---------- */
+  .assembly-stack {
+    display: flex;
+    flex-direction: column;
     gap: 24px;
   }
 
-  .photo-gallery-pair .photo-gallery-main {
-    aspect-ratio: 4 / 3;
+  .assembly-frame {
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
   }
 
-  @media (max-width: 720px) {
-    .photo-gallery-pair { grid-template-columns: 1fr; }
+  .assembly-frame img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    transform: rotate(-90deg);
   }
 
   /* ---------- Downloads / resources section ---------- */
@@ -856,12 +868,13 @@
 <nav class="rail" aria-label="Section navigation">
   <div class="rail-track">
     <a class="rail-item" href="#gallery">In the Field</a>
-    <a class="rail-item" href="#render">3D Render</a>
+    <a class="rail-item" href="#assembly">Assembly</a>
     <a class="rail-item" href="#features">Features</a>
     <a class="rail-item" href="#challenges">Design Challenges</a>
     <a class="rail-item" href="#fabrication">Fab Drawing</a>
     <a class="rail-item" href="#stackup">Board Stackup</a>
     <a class="rail-item" href="#schematic">Schematic</a>
+    <a class="rail-item" href="#render">3D Render</a>
     <a class="rail-item" href="#resources">Project Files</a>
   </div>
 </nav>
@@ -902,41 +915,21 @@
       <div class="photo-gallery-main">
         <img src="iridium_modem_on_buoy.png" alt="Iridium Modem SIO installed on ocean buoy" loading="lazy">
       </div>
-      <div class="photo-gallery-pair">
-        <div class="photo-gallery-main">
-          <img src="iridium_modem_assembled_front.jpg" alt="Assembled Iridium Modem SIO, front view" loading="lazy">
-        </div>
-        <div class="photo-gallery-main">
-          <img src="iridium_modem_assmebled_side.jpg" alt="Assembled Iridium Modem SIO, side view" loading="lazy">
-        </div>
-      </div>
     </div>
   </section>
 
-  <section id="render">
+  <section id="assembly">
     <div class="section-head">
       <span class="section-num">02</span>
-      <h2>Board Render</h2>
+      <h2>Assembly</h2>
     </div>
     <div class="section-rule"></div>
-    <div class="render-stack">
-      <div>
-        <div class="render-frame" id="render-frame-1">
-          <img src="Iridium_Modem_3D_Render_1.jpg" alt="Iridium Modem SIO board render — view 1" loading="lazy">
-        </div>
-        <div class="render-caption">
-          <span>Iridium_Modem_3D_Render.jpg</span>
-          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_1.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
-        </div>
+    <div class="assembly-stack">
+      <div class="assembly-frame">
+        <img src="iridium_modem_assembled_front.jpg" alt="Assembled Iridium Modem SIO, front view">
       </div>
-      <div>
-        <div class="render-frame" id="render-frame-2">
-          <img src="Iridium_Modem_3D_Render_2.jpg" alt="Iridium Modem SIO board render — view 2" loading="lazy">
-        </div>
-        <div class="render-caption">
-          <span>Iridium_Modem_3D_Render.jpg</span>
-          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
-        </div>
+      <div class="assembly-frame">
+        <img src="iridium_modem_assmebled_side.jpg" alt="Assembled Iridium Modem SIO, side view">
       </div>
     </div>
   </section>
@@ -1109,9 +1102,37 @@
     </div>
   </section>
 
-  <section id="resources">
+  <section id="render">
     <div class="section-head">
       <span class="section-num">08</span>
+      <h2>3D Render</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="render-stack">
+      <div>
+        <div class="render-frame" id="render-frame-1">
+          <img src="Iridium_Modem_3D_Render_1.jpg" alt="Iridium Modem SIO board render — view 1" loading="lazy">
+        </div>
+        <div class="render-caption">
+          <span>Iridium_Modem_3D_Render.jpg</span>
+          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_1.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
+        </div>
+      </div>
+      <div>
+        <div class="render-frame" id="render-frame-2">
+          <img src="Iridium_Modem_3D_Render_2.jpg" alt="Iridium Modem SIO board render — view 2" loading="lazy">
+        </div>
+        <div class="render-caption">
+          <span>Iridium_Modem_3D_Render.jpg</span>
+          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources">
+    <div class="section-head">
+      <span class="section-num">09</span>
       <h2>Project Files</h2>
     </div>
     <div class="section-rule"></div>
