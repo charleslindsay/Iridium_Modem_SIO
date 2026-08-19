@@ -298,6 +298,12 @@
     border: none;
   }
 
+  .render-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   .render-caption {
     margin-top: 16px;
     font-family: var(--mono);
@@ -591,16 +597,16 @@
     <div class="render-stack">
       <div>
         <div class="render-frame" id="render-frame-1">
-          <div class="pdf-loading" data-loading-for="render-frame-1">Loading render — page 1…</div>
+          <img src="Iridium_Modem_3D_Render_1.jpg" alt="Iridium Modem SIO board render — view 1" loading="lazy">
         </div>
       </div>
       <div>
         <div class="render-frame" id="render-frame-2">
-          <div class="pdf-loading" data-loading-for="render-frame-2">Loading render — page 2…</div>
+          <img src="Iridium_Modem_3D_Render_2.jpg" alt="Iridium Modem SIO board render — view 2" loading="lazy">
         </div>
         <div class="render-caption">
-          <span>Iridium_Modem_3D_Render.pdf</span>
-          <span><a href="Iridium_Modem_3D_Render.pdf#page=2" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
+          <span>Iridium_Modem_3D_Render.jpg</span>
+          <span><a href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
         </div>
       </div>
     </div>
@@ -673,9 +679,9 @@
         <span class="rk">Fabrication</span>
         <span class="rv">Fabrication_Drawing.pdf</span>
       </a>
-      <a class="res-item" href="Iridium_Modem_3D_Render.pdf" target="_blank" rel="noopener">
+      <a class="res-item" href="Iridium_Modem_3D_Render_1.jpg" target="_blank" rel="noopener">
         <span class="rk">3D Render</span>
-        <span class="rv">3D_Render.pdf</span>
+        <span class="rv">3D_Render.jpg</span>
       </a>
       <a class="res-item" href="Iridium_Modem_BOM.xls" target="_blank" rel="noopener">
         <span class="rk">Bill of Materials</span>
@@ -736,8 +742,6 @@
     }
   }
 
-  renderPdfIntoContainer('Iridium_Modem_3D_Render.pdf', 'render-frame-1', { onlyPage: 1, targetWidth: 1600 });
-  renderPdfIntoContainer('Iridium_Modem_3D_Render.pdf', 'render-frame-2', { onlyPage: 2, targetWidth: 1600 });
   renderPdfIntoContainer('Iridium_Modem_Schematic.pdf', 'schematic-pages', { targetWidth: 1600 });
   renderPdfIntoContainer('Iridium_Modem_SIO_Fabrication_Drawing.pdf', 'fab-pages', { singlePage: true, targetWidth: 1600 });
 
