@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iridium Modem SIO — Satellite Uplink Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #12181C;
+    --bg-raised: #171F24;
+    --line: #263038;
+    --line-bright: #37444E;
+    --accent: #7FDBDA;
+    --accent-dim: #4E8C8B;
+    --signal: #E8A33D;
+    --text: #E8E6E0;
+    --text-dim: #8A9199;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  ::selection { background: var(--accent-dim); color: var(--bg); }
+
+  /* ---------- Background grid texture ---------- */
+  .grid-backdrop {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---------- Side rail nav ---------- */
+  .rail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    padding: 40px 0 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .rail-track {
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .rail-track::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    background: var(--line-bright);
+  }
+
+  .rail-item {
+    position: relative;
+    display: block;
+    padding: 10px 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .rail-item::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line-bright);
+    transition: all 0.2s ease;
+  }
+
+  .rail-item:hover,
+  .rail-item.active {
+    color: var(--accent);
+  }
+
+  .rail-item:hover::before,
+  .rail-item.active::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .rail { display: none; }
+  }
+
+  /* ---------- Main content ---------- */
+  main {
+    position: relative;
+    z-index: 1;
+    margin-left: 220px;
+    max-width: 900px;
+    padding: 0 48px 120px;
+  }
+
+  @media (max-width: 900px) {
+    main { margin-left: 0; padding: 0 24px 80px; }
+  }
+
+  section { scroll-margin-top: 40px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 60px;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--signal);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--signal);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--signal);
+  }
+
+  .hero h1 {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    max-width: 14ch;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 46ch;
+  }
+
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+
+  .hero-meta-item .k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .hero-meta-item .v {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+  }
+
+  /* ---------- Section headers ---------- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 8px;
+    padding-top: 96px;
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-dim);
+  }
+
+  .section-head h2 {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .section-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--line-bright), transparent);
+    margin: 20px 0 40px;
+  }
+
+  .section-intro {
+    color: var(--text-dim);
+    max-width: 60ch;
+    margin-bottom: 8px;
+  }
+
+  /* ---------- Readme section ---------- */
+  .readme-body {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 32px 36px;
+  }
+
+  .readme-body p { margin-bottom: 16px; color: var(--text); }
+  .readme-body p:last-child { margin-bottom: 0; }
+
+  .readme-edit-note {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    border-left: 2px solid var(--signal);
+    padding-left: 12px;
+  }
+
+  /* ---------- 3D render (no-scroll, contained viewport) ---------- */
+  .render-frame {
+    position: relative;
+    height: 640px;
+    max-height: 75vh;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .render-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
+    pointer-events: none;
+  }
+
+  .render-frame embed,
+  .render-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .render-caption {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ---------- Scrolling document viewers (schematic / fab drawing) ---------- */
+  .doc-layout {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  @media (max-width: 720px) {
+    .doc-layout { grid-template-columns: 1fr; }
+  }
+
+  .doc-scroll {
+    height: 780px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-bright) var(--bg-raised);
+  }
+
+  .doc-scroll::-webkit-scrollbar { width: 8px; }
+  .doc-scroll::-webkit-scrollbar-track { background: var(--bg-raised); }
+  .doc-scroll::-webkit-scrollbar-thumb { background: var(--line-bright); border-radius: 4px; }
+
+  .doc-scroll-inner {
+    padding: 16px;
+  }
+
+  .doc-scroll object,
+  .doc-scroll img {
+    width: 100%;
+    display: block;
+  }
+
+  .doc-scroll-hint {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 6px 12px;
+    text-align: center;
+  }
+
+  .doc-notes h3 {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--signal);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .note-slot {
+    border-left: 2px solid var(--line-bright);
+    padding: 4px 0 4px 16px;
+    margin-bottom: 20px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+
+  .note-slot .tag {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent-dim);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .note-slot.placeholder {
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .doc-fallback {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .doc-fallback a { color: var(--accent); }
+
+  /* ---------- Downloads / resources section ---------- */
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .res-item {
+    background: var(--bg-raised);
+    padding: 22px 20px;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+    transition: background 0.15s ease;
+  }
+
+  .res-item:hover { background: #1C262C; }
+
+  .res-item .rk {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .res-item .rv {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+  }
+
+  .res-item .rv::after {
+    content: ' ↓';
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 120px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer a { color: var(--text-dim); }
+  footer a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-backdrop"></div>
+
+<nav class="rail" aria-label="Section navigation">
+  <div class="rail-track">
+    <a class="rail-item" href="#overview">Overview</a>
+    <a class="rail-item" href="#render">3D Render</a>
+    <a class="rail-item" href="#schematic">Schematic</a>
+    <a class="rail-item" href="#fabrication">Fab Drawing</a>
+    <a class="rail-item" href="#resources">Resources</a>
+  </div>
+</nav>
+
+<main>
+
+  <section class="hero" id="top">
+    <div class="hero-eyebrow">Open ocean buoy uplink module</div>
+    <h1>Iridium Modem <span>SIO</span></h1>
+    <p class="hero-sub">
+      A satellite modem with integrated GPS, built for reliable data uplink from remote ocean buoys over an RS-232 interface.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="k">Interface</span>
+        <span class="v">RS-232</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="k">Positioning</span>
+        <span class="v">Integrated GPS</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="k">Repository</span>
+        <span class="v"><a href="https://github.com/charleslindsay/Iridium_Modem_SIO" style="color:inherit;text-decoration:none;">github.com/charleslindsay</a></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="overview">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>Overview</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="readme-body">
+      <p>Satellite modem with integrated GPS module. Communication over RS-232 interface.</p>
+      <p>Optimized for open ocean buoy data uplink.</p>
+      <div class="readme-edit-note">
+        README content — edit this block or replace it as the project documentation grows.
+      </div>
+    </div>
+  </section>
+
+  <section id="render">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>3D Render</h2>
+    </div>
+    <div class="section-rule"></div>
+    <p class="section-intro">Full-board render. Add feature callouts alongside as the design is annotated.</p>
+    <div class="render-frame">
+      <object data="Iridium_Modem_3D_Render.pdf" type="application/pdf">
+        <div class="doc-fallback">
+          3D render preview unavailable in this browser.<br>
+          <a href="Iridium_Modem_3D_Render.pdf" target="_blank" rel="noopener">Open Iridium_Modem_3D_Render.pdf directly →</a>
+        </div>
+      </object>
+    </div>
+    <div class="render-caption">
+      <span>Iridium_Modem_3D_Render.pdf</span>
+      <span><a href="Iridium_Modem_3D_Render.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
+    </div>
+  </section>
+
+  <section id="schematic">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Schematic</h2>
+    </div>
+    <div class="section-rule"></div>
+    <p class="section-intro">Scroll through the full schematic below. Notes on individual nets and features can be added in the margin.</p>
+    <div class="doc-layout">
+      <div class="doc-scroll">
+        <div class="doc-scroll-hint">Scroll to view full schematic ↓</div>
+        <div class="doc-scroll-inner">
+          <object data="Iridium_Modem_Schematic.pdf" type="application/pdf" width="100%">
+            <div class="doc-fallback">
+              Schematic preview unavailable in this browser.<br>
+              <a href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener">Open Iridium_Modem_Schematic.pdf directly →</a>
+            </div>
+          </object>
+        </div>
+      </div>
+      <div class="doc-notes">
+        <h3>Feature notes</h3>
+        <div class="note-slot placeholder">
+          <span class="tag">Power stage</span>
+          Add notes on the power supply and regulation circuitry here.
+        </div>
+        <div class="note-slot placeholder">
+          <span class="tag">GPS front end</span>
+          Add notes on the GPS module integration here.
+        </div>
+        <div class="note-slot placeholder">
+          <span class="tag">RS-232 interface</span>
+          Add notes on the serial interface and level shifting here.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fabrication">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Fabrication Drawing</h2>
+    </div>
+    <div class="section-rule"></div>
+    <p class="section-intro">Board outline, dimensions, and manufacturing notes. Scroll through the full drawing below.</p>
+    <div class="doc-layout">
+      <div class="doc-scroll">
+        <div class="doc-scroll-hint">Scroll to view full drawing ↓</div>
+        <div class="doc-scroll-inner">
+          <object data="Iridium_Modem_SIO_Fabrication_Drawing.pdf" type="application/pdf" width="100%">
+            <div class="doc-fallback">
+              Fabrication drawing preview unavailable in this browser.<br>
+              <a href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener">Open Iridium_Modem_SIO_Fabrication_Drawing.pdf directly →</a>
+            </div>
+          </object>
+        </div>
+      </div>
+      <div class="doc-notes">
+        <h3>Feature notes</h3>
+        <div class="note-slot placeholder">
+          <span class="tag">Board outline</span>
+          Add notes on overall dimensions and mounting here.
+        </div>
+        <div class="note-slot placeholder">
+          <span class="tag">Enclosure fit</span>
+          Add notes on clearance and enclosure compatibility here.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>Resources</h2>
+    </div>
+    <div class="section-rule"></div>
+    <p class="section-intro">Downloadable project files.</p>
+    <div class="res-grid">
+      <a class="res-item" href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener">
+        <span class="rk">Schematic</span>
+        <span class="rv">Iridium_Modem_Schematic.pdf</span>
+      </a>
+      <a class="res-item" href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener">
+        <span class="rk">Fabrication</span>
+        <span class="rv">Fabrication_Drawing.pdf</span>
+      </a>
+      <a class="res-item" href="Iridium_Modem_3D_Render.pdf" target="_blank" rel="noopener">
+        <span class="rk">3D Render</span>
+        <span class="rv">3D_Render.pdf</span>
+      </a>
+      <a class="res-item" href="Iridium_Modem_BOM.xls" target="_blank" rel="noopener">
+        <span class="rk">Bill of Materials</span>
+        <span class="rv">Iridium_Modem_BOM.xls</span>
+      </a>
+      <a class="res-item" href="iridium_modem_SIO_gerber.zip" target="_blank" rel="noopener">
+        <span class="rk">Manufacturing Files</span>
+        <span class="rv">iridium_modem_SIO_gerber.zip</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Iridium Modem SIO</span>
+    <span><a href="https://github.com/charleslindsay/Iridium_Modem_SIO" target="_blank" rel="noopener">View source on GitHub →</a></span>
+  </footer>
+
+</main>
+
+<script>
+  // Highlight active rail item on scroll
+  const sections = document.querySelectorAll('main section[id]');
+  const railItems = document.querySelectorAll('.rail-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.getAttribute('id');
+      const railItem = document.querySelector(`.rail-item[href="#${id}"]`);
+      if (!railItem) return;
+      if (entry.isIntersecting) {
+        railItems.forEach(i => i.classList.remove('active'));
+        railItem.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
