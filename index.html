@@ -319,6 +319,22 @@
     .doc-layout { grid-template-columns: 1fr; }
   }
 
+  .doc-scroll-full {
+    width: 100%;
+    height: 900px;
+  }
+
+  .doc-notes-below {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px 32px;
+  }
+
+  .doc-notes-below h3 {
+    grid-column: 1 / -1;
+  }
+
   .doc-scroll {
     height: 780px;
     max-height: 80vh;
@@ -432,12 +448,19 @@
   /* ---------- Downloads / resources section ---------- */
   .res-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--line);
     border: 1px solid var(--line);
     border-radius: 6px;
     overflow: hidden;
+  }
+
+  .res-item.span-2 { grid-column: span 2; }
+
+  @media (max-width: 640px) {
+    .res-grid { grid-template-columns: 1fr; }
+    .res-item.span-2 { grid-column: span 1; }
   }
 
   .res-item {
@@ -581,28 +604,26 @@
       <h2>Schematic</h2>
     </div>
     <div class="section-rule"></div>
-    <p class="section-intro">Scroll through the full schematic below. Notes on individual nets and features can be added in the margin.</p>
-    <div class="doc-layout">
-      <div class="doc-scroll">
-        <div class="doc-scroll-hint">Scroll to view full schematic ↓</div>
-        <div class="doc-scroll-inner" id="schematic-pages">
-          <div class="pdf-loading" data-loading-for="schematic-pages">Loading schematic…</div>
-        </div>
+    <p class="section-intro">Scroll through the full schematic below. Feature notes follow underneath.</p>
+    <div class="doc-scroll doc-scroll-full">
+      <div class="doc-scroll-hint">Scroll to view full schematic ↓</div>
+      <div class="doc-scroll-inner" id="schematic-pages">
+        <div class="pdf-loading" data-loading-for="schematic-pages">Loading schematic…</div>
       </div>
-      <div class="doc-notes">
-        <h3>Feature notes</h3>
-        <div class="note-slot placeholder">
-          <span class="tag">Power stage</span>
-          Add notes on the power supply and regulation circuitry here.
-        </div>
-        <div class="note-slot placeholder">
-          <span class="tag">GPS front end</span>
-          Add notes on the GPS module integration here.
-        </div>
-        <div class="note-slot placeholder">
-          <span class="tag">RS-232 interface</span>
-          Add notes on the serial interface and level shifting here.
-        </div>
+    </div>
+    <div class="doc-notes doc-notes-below">
+      <h3>Feature notes</h3>
+      <div class="note-slot placeholder">
+        <span class="tag">Power stage</span>
+        Add notes on the power supply and regulation circuitry here.
+      </div>
+      <div class="note-slot placeholder">
+        <span class="tag">GPS front end</span>
+        Add notes on the GPS module integration here.
+      </div>
+      <div class="note-slot placeholder">
+        <span class="tag">RS-232 interface</span>
+        Add notes on the serial interface and level shifting here.
       </div>
     </div>
   </section>
@@ -614,23 +635,21 @@
     </div>
     <div class="section-rule"></div>
     <p class="section-intro">Board outline, dimensions, and manufacturing notes. Scroll through the full drawing below.</p>
-    <div class="doc-layout">
-      <div class="doc-scroll">
-        <div class="doc-scroll-hint">Scroll to view full drawing ↓</div>
-        <div class="doc-scroll-inner" id="fab-pages">
-          <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
-        </div>
+    <div class="doc-scroll doc-scroll-full">
+      <div class="doc-scroll-hint">Scroll to view full drawing ↓</div>
+      <div class="doc-scroll-inner" id="fab-pages">
+        <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
       </div>
-      <div class="doc-notes">
-        <h3>Feature notes</h3>
-        <div class="note-slot placeholder">
-          <span class="tag">Board outline</span>
-          Add notes on overall dimensions and mounting here.
-        </div>
-        <div class="note-slot placeholder">
-          <span class="tag">Enclosure fit</span>
-          Add notes on clearance and enclosure compatibility here.
-        </div>
+    </div>
+    <div class="doc-notes doc-notes-below">
+      <h3>Feature notes</h3>
+      <div class="note-slot placeholder">
+        <span class="tag">Board outline</span>
+        Add notes on overall dimensions and mounting here.
+      </div>
+      <div class="note-slot placeholder">
+        <span class="tag">Enclosure fit</span>
+        Add notes on clearance and enclosure compatibility here.
       </div>
     </div>
   </section>
@@ -659,7 +678,7 @@
         <span class="rk">Bill of Materials</span>
         <span class="rv">Iridium_Modem_BOM.xls</span>
       </a>
-      <a class="res-item" href="iridium_modem_SIO_gerber.zip" target="_blank" rel="noopener">
+      <a class="res-item span-2" href="iridium_modem_SIO_gerber.zip" target="_blank" rel="noopener">
         <span class="rk">Manufacturing Files</span>
         <span class="rv">iridium_modem_SIO_gerber.zip</span>
       </a>
