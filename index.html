@@ -745,10 +745,9 @@
 
   /* ---------- Photo gallery (buoy + assembled photos) ---------- */
   .photo-gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 24px;
-    align-items: stretch;
   }
 
   .photo-gallery-main {
@@ -757,7 +756,8 @@
     border: 1px solid var(--line);
     border-radius: 6px;
     overflow: hidden;
-    aspect-ratio: 3 / 4;
+    width: 100%;
+    aspect-ratio: 16 / 9;
   }
 
   .photo-gallery-main img {
@@ -767,9 +767,18 @@
     object-fit: cover;
   }
 
+  .photo-gallery-pair {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .photo-gallery-pair .photo-gallery-main {
+    aspect-ratio: 4 / 3;
+  }
+
   @media (max-width: 720px) {
-    .photo-gallery { grid-template-columns: 1fr; }
-    .photo-gallery-main { aspect-ratio: 4 / 3; }
+    .photo-gallery-pair { grid-template-columns: 1fr; }
   }
 
   /* ---------- Downloads / resources section ---------- */
@@ -893,11 +902,13 @@
       <div class="photo-gallery-main">
         <img src="iridium_modem_on_buoy.png" alt="Iridium Modem SIO installed on ocean buoy" loading="lazy">
       </div>
-      <div class="photo-gallery-main">
-        <img src="iridium_modem_assembled_front.jpg" alt="Assembled Iridium Modem SIO, front view" loading="lazy">
-      </div>
-      <div class="photo-gallery-main">
-        <img src="iridium_modem_assmebled_side.jpg" alt="Assembled Iridium Modem SIO, side view" loading="lazy">
+      <div class="photo-gallery-pair">
+        <div class="photo-gallery-main">
+          <img src="iridium_modem_assembled_front.jpg" alt="Assembled Iridium Modem SIO, front view" loading="lazy">
+        </div>
+        <div class="photo-gallery-main">
+          <img src="iridium_modem_assmebled_side.jpg" alt="Assembled Iridium Modem SIO, side view" loading="lazy">
+        </div>
       </div>
     </div>
   </section>
