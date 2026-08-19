@@ -1,2 +1,2 @@
 # Iridium_Modem_SIO
-Wireless satellite and GPS modem with RS-232 peripheral interface
+Satellite modem with integrated GPS module. Communication over RS-232 interface.
