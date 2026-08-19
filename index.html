@@ -185,6 +185,15 @@
     max-width: 46ch;
   }
 
+  .hero-note {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--accent-dim);
+    max-width: 46ch;
+  }
+
   .hero-meta {
     margin-top: 48px;
     display: flex;
@@ -311,6 +320,10 @@
     color: var(--text-dim);
     display: flex;
     justify-content: space-between;
+  }
+
+  .render-caption .full-size-link {
+    font-size: 14px;
   }
 
   /* ---------- Scrolling document viewers (schematic / fab drawing) ---------- */
@@ -548,7 +561,7 @@
     <a class="rail-item" href="#render">3D Render</a>
     <a class="rail-item" href="#schematic">Schematic</a>
     <a class="rail-item" href="#fabrication">Fab Drawing</a>
-    <a class="rail-item" href="#resources">Resources</a>
+    <a class="rail-item" href="#resources">Project Files</a>
   </div>
 </nav>
 
@@ -558,8 +571,9 @@
     <div class="hero-eyebrow">Open ocean buoy communications module</div>
     <h1>Iridium Modem <span>SIO</span></h1>
     <p class="hero-sub">
-      A satellite modem with integrated GNSS, built for reliable data and position uplink from ocean buoys deployed in remote environments.
+      A satellite modem with integrated GNSS for reliable data and position uplink on offshore ocean buoys
     </p>
+    <p class="hero-note">Developed at the Scripps Institution of Oceanography (SIO)</p>
     <div class="hero-meta">
       <div class="hero-meta-item">
         <span class="k">Constellation</span>
@@ -599,6 +613,10 @@
         <div class="render-frame" id="render-frame-1">
           <img src="Iridium_Modem_3D_Render_1.jpg" alt="Iridium Modem SIO board render — view 1" loading="lazy">
         </div>
+        <div class="render-caption">
+          <span>Iridium_Modem_3D_Render.jpg</span>
+          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_1.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
+        </div>
       </div>
       <div>
         <div class="render-frame" id="render-frame-2">
@@ -606,7 +624,7 @@
         </div>
         <div class="render-caption">
           <span>Iridium_Modem_3D_Render.jpg</span>
-          <span><a href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">open full size →</a></span>
+          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
         </div>
       </div>
     </div>
@@ -623,6 +641,10 @@
       <div class="doc-scroll-inner" id="schematic-pages">
         <div class="pdf-loading" data-loading-for="schematic-pages">Loading schematic…</div>
       </div>
+    </div>
+    <div class="render-caption">
+      <span>Iridium_Modem_Schematic.pdf</span>
+      <span><a class="full-size-link" href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Schematic →</a></span>
     </div>
     <div class="doc-notes doc-notes-below">
       <h3>Feature notes</h3>
@@ -650,6 +672,10 @@
     <div class="doc-frame-full" id="fab-pages">
       <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
     </div>
+    <div class="render-caption">
+      <span>Iridium_Modem_SIO_Fabrication_Drawing.pdf</span>
+      <span><a class="full-size-link" href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Fabrication Drawing →</a></span>
+    </div>
     <div class="doc-notes doc-notes-below">
       <h3>Feature notes</h3>
       <div class="note-slot placeholder">
@@ -666,10 +692,9 @@
   <section id="resources">
     <div class="section-head">
       <span class="section-num">05</span>
-      <h2>Resources</h2>
+      <h2>Project Files</h2>
     </div>
     <div class="section-rule"></div>
-    <p class="section-intro">Downloadable project files.</p>
     <div class="res-grid">
       <a class="res-item" href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener">
         <span class="rk">Schematic</span>
@@ -737,7 +762,7 @@
       console.error('PDF render failed for', containerId, err);
       container.innerHTML = `<div class="doc-fallback">
           Preview unavailable in this browser.<br>
-          <a href="${url}" target="_blank" rel="noopener">Open ${url} directly →</a>
+          <a href="${url}" target="_blank" rel="noopener">Open ${url} →</a>
         </div>`;
     }
   }
