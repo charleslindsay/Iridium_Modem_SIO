@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iridium Modem SIO — Satellite Uplink Module</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">`
+<title>BeaverCube Flight Computer — Open-Source Flight Computer Platform for CubeSats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
   :root {
-    --bg: #12181C;
-    --bg-raised: #171F24;
-    --line: #263038;
-    --line-bright: #37444E;
-    --accent: #7FDBDA;
-    --accent-dim: #6FBFBD;
+    --bg: #0B0F1A;
+    --bg-raised: #131A2C;
+    --line: #202840;
+    --line-bright: #35406A;
+    --accent: #7FE0A8;
+    --accent-dim: #5FBF8C;
     --signal: #E8A33D;
-    --text: #E8E6E0;
-    --text-dim: #A9B0B8;
+    --text: #E7E9F0;
+    --text-dim: #9BA3BD;
     --mono: 'JetBrains Mono', monospace;
     --sans: 'Inter', sans-serif;
   }
@@ -47,6 +47,21 @@
     opacity: 0.25;
     pointer-events: none;
     z-index: 0;
+  }
+
+  .grid-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(1px 1px at 20% 30%, rgba(231,233,240,0.5), transparent),
+      radial-gradient(1px 1px at 70% 10%, rgba(231,233,240,0.4), transparent),
+      radial-gradient(1px 1px at 40% 70%, rgba(231,233,240,0.35), transparent),
+      radial-gradient(1px 1px at 85% 55%, rgba(231,233,240,0.45), transparent),
+      radial-gradient(1px 1px at 10% 85%, rgba(231,233,240,0.3), transparent),
+      radial-gradient(1px 1px at 60% 45%, rgba(231,233,240,0.4), transparent),
+      radial-gradient(1px 1px at 92% 80%, rgba(231,233,240,0.35), transparent);
+    background-repeat: no-repeat;
   }
 
   /* ---------- Side rail nav ---------- */
@@ -173,7 +188,7 @@
     line-height: 1.08;
     letter-spacing: -0.01em;
     color: var(--text);
-    max-width: 14ch;
+    max-width: 16ch;
   }
 
   .hero h1 span { color: var(--accent); }
@@ -182,7 +197,7 @@
     margin-top: 24px;
     font-size: 1.15rem;
     color: var(--text-dim);
-    max-width: 46ch;
+    max-width: 48ch;
   }
 
   .hero-note {
@@ -191,7 +206,7 @@
     font-size: 12px;
     letter-spacing: 0.04em;
     color: var(--accent-dim);
-    max-width: 46ch;
+    max-width: 52ch;
   }
 
   .hero-author {
@@ -200,7 +215,7 @@
     font-size: 12px;
     letter-spacing: 0.04em;
     color: var(--signal);
-    max-width: 46ch;
+    max-width: 52ch;
   }
 
   .hero-author a {
@@ -214,11 +229,36 @@
 
   .hero-meta {
     margin-top: 48px;
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 32px;
+    align-items: center;
     border-top: 1px solid var(--line);
     padding-top: 24px;
+  }
+
+  .hero-meta-image {
+    width: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .hero-meta-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .hero-meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .hero-meta { grid-template-columns: 1fr; }
   }
 
   .hero-meta-item .k {
@@ -271,7 +311,7 @@
     margin-bottom: 8px;
   }
 
-  /* ---------- Readme section ---------- */
+  /* ---------- Readme / prose panel ---------- */
   .readme-body {
     background: var(--bg-raised);
     border: 1px solid var(--line);
@@ -281,15 +321,6 @@
 
   .readme-body p { margin-bottom: 16px; color: var(--text); }
   .readme-body p:last-child { margin-bottom: 0; }
-
-  .readme-edit-note {
-    margin-top: 16px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    border-left: 2px solid var(--signal);
-    padding-left: 12px;
-  }
 
   /* ---------- Features / spec list ---------- */
   .spec-grid {
@@ -368,101 +399,10 @@
     color: var(--line-bright);
   }
 
-  /* ---------- 3D render (two stacked page images) ---------- */
-  .render-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .render-frame {
-    position: relative;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-
-  .render-frame::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
-    pointer-events: none;
-  }
-
-  .render-frame embed,
-  .render-frame iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  .render-frame img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .render-caption {
-    margin-top: 16px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .render-caption .full-size-link {
-    font-size: 14px;
-  }
-
-  /* ---------- Scrolling document viewers (schematic / fab drawing) ---------- */
-  .doc-layout {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-
-  @media (max-width: 720px) {
-    .doc-layout { grid-template-columns: 1fr; }
-  }
-
+  /* ---------- Scrolling document viewer (schematic) ---------- */
   .doc-scroll-full {
     width: 100%;
     height: 900px;
-  }
-
-  .doc-frame-full {
-    width: 100%;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 16px;
-  }
-
-  .doc-frame-full .pdf-page-canvas {
-    width: 100%;
-    height: auto;
-    margin-bottom: 0;
-    border: none;
-    border-radius: 0;
-  }
-
-  .doc-notes-below {
-    margin-top: 32px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 8px 32px;
-  }
-
-  .doc-notes-below h3 {
-    grid-column: 1 / -1;
   }
 
   .doc-scroll {
@@ -505,37 +445,6 @@
     text-align: center;
   }
 
-  .doc-notes h3 {
-    font-family: var(--mono);
-    font-size: 15px;
-    letter-spacing: 0.04em;
-    color: var(--signal);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .note-slot {
-    border-left: 2px solid var(--line-bright);
-    padding: 4px 0 4px 16px;
-    margin-bottom: 20px;
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    opacity: 1;
-  }
-
-  .note-slot .tag {
-    display: block;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--accent-dim);
-    margin-bottom: 4px;
-    letter-spacing: 0.05em;
-  }
-
-  .note-slot.placeholder {
-    font-style: italic;
-  }
-
   .doc-fallback {
     padding: 60px 24px;
     text-align: center;
@@ -567,12 +476,75 @@
 
   .pdf-page-canvas:last-child { margin-bottom: 0; }
 
-  .render-frame .pdf-page-canvas {
+  /* ---------- 3D render (two stacked images) ---------- */
+  .render-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .render-frame {
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .render-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
+    pointer-events: none;
+  }
+
+  .render-frame img {
+    display: block;
     width: 100%;
     height: auto;
-    margin-bottom: 0;
-    border: none;
-    border-radius: 0;
+  }
+
+  .render-caption {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .render-caption .full-size-link {
+    font-size: 14px;
+  }
+
+  /* ---------- Prototype (assembly photos, side by side) ---------- */
+  .assembly-stack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 720px) {
+    .assembly-stack { grid-template-columns: 1fr; }
+  }
+
+  .assembly-frame {
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .assembly-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   /* ---------- Design challenge blocks ---------- */
@@ -649,145 +621,6 @@
     color: var(--accent-dim);
   }
 
-  .challenge-tradeoff {
-    margin-top: 18px;
-    padding-left: 14px;
-    border-left: 2px solid var(--line-bright);
-    font-size: 0.92rem;
-    color: var(--text-dim);
-  }
-
-  .challenge-tradeoff strong {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  /* ---------- Board stackup ---------- */
-  .stackup-stats {
-    display: flex;
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 24px;
-  }
-
-  .stackup-stat {
-    flex: 1;
-    background: var(--bg-raised);
-    padding: 24px 28px;
-    text-align: center;
-  }
-
-  .stackup-stat .k {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  .stackup-stat .v {
-    font-family: var(--mono);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  .stackup-stat .v small {
-    font-size: 1rem;
-    color: var(--text-dim);
-    font-weight: 500;
-    margin-left: 4px;
-  }
-
-  .stackup-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  @media (max-width: 720px) {
-    .stackup-cards { grid-template-columns: 1fr; }
-    .stackup-stats { flex-direction: column; }
-  }
-
-  .stackup-card {
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 22px 20px;
-  }
-
-  .stackup-card .title {
-    font-family: var(--mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 8px;
-    letter-spacing: 0.01em;
-  }
-
-  .stackup-card .desc {
-    font-size: 0.96rem;
-    color: var(--text-dim);
-    line-height: 1.55;
-  }
-
-  /* ---------- Photo gallery (buoy + assembled photos) ---------- */
-  .photo-gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .photo-gallery-main {
-    position: relative;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-  }
-
-  .photo-gallery-main img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* ---------- Assembly (rotated photos, stacked) ---------- */
-  .assembly-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .assembly-frame {
-    position: relative;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .assembly-frame img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
   /* ---------- Downloads / resources section ---------- */
   .res-grid {
     display: grid;
@@ -812,7 +645,7 @@
     transition: background 0.15s ease;
   }
 
-  .res-item:hover { background: #1C262C; }
+  .res-item:hover { background: #161C30; }
 
   .res-item .rk {
     font-family: var(--mono);
@@ -831,7 +664,7 @@
   }
 
   .res-item .rv::after {
-    content: ' ↓';
+    content: ' →';
   }
 
   /* ---------- Footer ---------- */
@@ -862,14 +695,15 @@
 
 <nav class="rail" aria-label="Section navigation">
   <div class="rail-track">
-    <a class="rail-item" href="#gallery">In the Field</a>
-    <a class="rail-item" href="#assembly">Assembly</a>
+    <a class="rail-item" href="#prototype">Prototype</a>
+    <a class="rail-item" href="#objectives">Mission Overview</a>
     <a class="rail-item" href="#features">Specifications</a>
     <a class="rail-item" href="#challenges">Design Challenges</a>
-    <a class="rail-item" href="#fabrication">Fab Drawing</a>
-    <a class="rail-item" href="#stackup">Board Stackup</a>
+    <a class="rail-item" href="#testing">Testing</a>
     <a class="rail-item" href="#schematic">Schematic</a>
+    <a class="rail-item" href="#block-diagram">Block Diagram</a>
     <a class="rail-item" href="#render">3D Render</a>
+    <a class="rail-item" href="#paper">SmallSat Paper</a>
     <a class="rail-item" href="#resources">Project Files</a>
   </div>
 </nav>
@@ -877,58 +711,82 @@
 <main>
 
   <section class="hero" id="top">
-    <div class="hero-eyebrow">Open ocean buoy communications module</div>
-    <h1>Iridium Modem <span>SIO</span></h1>
+    <div class="hero-eyebrow">Open-source flight computer platform for CubeSats</div>
+    <h1>BeaverCube <span>Flight Computer</span></h1>
     <p class="hero-sub">
-      A satellite modem with integrated GNSS module for reliable data and position uplink from offshore ocean buoys
+      A CubeSat flight computer with novel fault detection, isolation and response (FDIR) system. Supports a high data rate imaging payload plus standardized bus and power interfaces for the BeaverCube 3U CubeSat mission.
     </p>
-    <p class="hero-note">Developed at the Scripps Institution of Oceanography (SIO)</p>
-    <p class="hero-author">Charles Lindsay — <a href="mailto:chlindsay@ucsd.edu">chlindsay@ucsd.edu</a></p>
+    <p class="hero-note">MIT STAR Lab · Woods Hole Oceanographic Institute · Massachusetts Institute of Technology</p>
+    <p class="hero-author">Charles Lindsay, Ethan Sit — <a href="mailto:chlindsay@ucsd.edu">chlindsay@ucsd.edu</a></p>
     <div class="hero-meta">
-      <div class="hero-meta-item">
-        <span class="k">Constellation</span>
-        <span class="v">Iridium</span>
+      <div class="hero-meta-image">
+        <img src="BFC_assembled_render.png" alt="BeaverCube Flight Computer, assembled render" loading="lazy">
       </div>
-      <div class="hero-meta-item">
-        <span class="k">Positioning</span>
-        <span class="v">GPS, Galileo, GLONASS</span>
-      </div>
-      <div class="hero-meta-item">
-        <span class="k">External Controller</span>
-        <span class="v">ARM microcontroller</span>
+      <div class="hero-meta-list">
+        <div class="hero-meta-item">
+          <span class="k">Satellite Bus</span>
+          <span class="v">3U CubeSat</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="k">Processor</span>
+          <span class="v">Raspberry Pi (BCM2837B0)</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="k">Mission Life</span>
+          <span class="v">90 days in low Earth orbit (LEO)</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="gallery">
+  <section id="prototype">
     <div class="section-head">
       <span class="section-num">01</span>
-      <h2>In the Field</h2>
-    </div>
-    <div class="section-rule"></div>
-    <div class="photo-gallery">
-      <div class="photo-gallery-main">
-        <img src="iridium_modem_on_buoy.png" alt="Iridium Modem SIO installed on ocean buoy" loading="lazy">
-      </div>
-    </div>
-    <p class="section-intro" style="margin-top:20px;">Modem integrated into a datalogging buoy on its way to a deployment in the North Pacific 250 km offshore. Successfully transmitted data and position for 9 months at sea.</p>
-  </section>
-
-  <section id="assembly">
-    <div class="section-head">
-      <span class="section-num">02</span>
-      <h2>Assembly</h2>
+      <h2>Prototype</h2>
     </div>
     <div class="section-rule"></div>
     <div class="assembly-stack">
       <div class="assembly-frame">
-        <img src="iridium_modem_assembled_front.jpg" alt="Assembled Iridium Modem SIO, front view">
+        <img src="bfc_top.jpg" alt="Assembled BeaverCube Flight Computer, top view">
       </div>
       <div class="assembly-frame">
-        <img src="iridium_modem_assmebled_side.jpg" alt="Assembled Iridium Modem SIO, side view">
+        <img src="bfc_bottom.jpg" alt="Assembled BeaverCube Flight Computer, bottom view">
       </div>
     </div>
-    <p class="section-intro" style="margin-top:20px;">Board mounted to chassis and antennas on SMA bulkheads. Wire harness routed from waterproof bulkhead.</p>
+  </section>
+
+  <section id="objectives">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Mission Overview</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="readme-body">
+      <div class="spec-grid spec-grid-2x2">
+        <div class="spec-group">
+          <div class="spec-group-title">Objective</div>
+          <ul class="spec-list">
+            <li>Measure and track sea-surface temperature and color through infrared and visual spectrum imaging of coastal environments</li>
+          </ul>
+        </div>
+        <div class="spec-group">
+          <div class="spec-group-title">CubeSat Requirements</div>
+          <ul class="spec-list">
+            <li>Survive 90 days in low Earth orbit (LEO)</li>
+            <li>Support a primary and backup radio, antenna control board, electrical power system board, thermal control board, attitude control board, GPS, electrospray propulsion module and imaging payload</li>
+          </ul>
+        </div>
+        <div class="spec-group">
+          <div class="spec-group-title">Communication &amp; Data Handling</div>
+          <ul class="spec-list">
+            <li>Recover autonomously from software faults and non-destructive hardware upsets from ionizing radiation impact</li>
+            <li>Provide an onboard inertial measurement unit (IMU) and real-time clock (RTC)</li>
+            <li>Provide data storage for payload image storage</li>
+            <li>Run flight software to coordinate systems and data transfer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="features">
@@ -940,40 +798,45 @@
     <div class="readme-body">
       <div class="spec-grid spec-grid-2x2">
         <div class="spec-group">
-          <div class="spec-group-title">Power</div>
+          <div class="spec-group-title">Processor</div>
           <ul class="spec-list">
-            <li>Wide input voltage range (5 – 20 V)</li>
-            <li>Jumpers to selectively disable onboard ICs for low-power operation</li>
+            <li>Raspberry Pi Compute Module 3 Lite
+              <ul class="spec-sublist">
+                <li>BCM2837B0 1.40 GHz processor</li>
+                <li>1 GB LPDDR2 RAM</li>
+                <li>Micro-SD card flash memory</li>
+              </ul>
+            </li>
           </ul>
         </div>
         <div class="spec-group">
           <div class="spec-group-title">Peripherals</div>
           <ul class="spec-list">
-            <li>Dual RS-232 ports for parallel communication and position data</li>
+            <li>USB 2.0 (x3)</li>
+            <li>RS-485 UART</li>
+            <li>TTL UART (x3)</li>
+            <li>I2C</li>
           </ul>
         </div>
         <div class="spec-group">
-          <div class="spec-group-title">Satellite Module</div>
+          <div class="spec-group-title">Power</div>
           <ul class="spec-list">
-            <li>Iridium Core 9523N
-              <ul class="spec-sublist">
-                <li>RUDICS | SBD protocol</li>
-              </ul>
-            </li>
+            <li>PC/104 connector power bus interface 12V | 5 V | 3.3 V</li>
           </ul>
         </div>
         <div class="spec-group">
-          <div class="spec-group-title">GNSS Module</div>
+          <div class="spec-group-title">Integrated Sensors</div>
           <ul class="spec-list">
-            <li>Quectel L96-M33
-              <ul class="spec-sublist">
-                <li>Multi-constellation tracking</li>
-                <li>Flash memory</li>
-                <li>LNA</li>
-              </ul>
-            </li>
-            <li>Cold start &lt; 45 s | warm start &lt; 20 s</li>
-            <li>Active or passive antenna compatible</li>
+            <li>Real-time clock</li>
+            <li>ICM-20948 IMU</li>
+          </ul>
+        </div>
+        <div class="spec-group">
+          <div class="spec-group-title">Redundancy</div>
+          <ul class="spec-list">
+            <li>Dual SD card per compute module</li>
+            <li>Dual onboard regulators</li>
+            <li>Dual onboard IMUs</li>
           </ul>
         </div>
       </div>
@@ -989,86 +852,57 @@
 
     <div class="challenge-block challenge-constraint">
       <div class="challenge-label">Mechanical Constraint</div>
-      <p>Board must mount to a metal chassis housed inside a vacuum-sealed pressure vessel. This must withstand subsurface pressure at 100 m to survive initial buoy deployment.</p>
+      <p>Board must sit within the standard 3U CubeSat chassis stack. It will interface with the main power and communications bus through a standardized PC/104 header.</p>
     </div>
 
     <div class="challenge-block challenge-problem">
-      <div class="challenge-label">RF Problem</div>
+      <div class="challenge-label">Radiation Problem</div>
       <ul>
-        <li><strong>Interference:</strong> Pressure vessel diameter &lt; λ/2 means GNSS and Iridium antennas will be strongly coupled, risking RF power leakage into the GNSS front-end.</li>
-        <li><strong>Directionality:</strong> Unpredictable wave motion means antenna orientation will be changing constantly.</li>
-      </ul>
-    </div>
-
-    <div class="challenge-block challenge-problem">
-      <div class="challenge-label">Thermal Problem</div>
-      <ul>
-        <li><strong>Heat dissipation:</strong> Vacuum-sealed means heat will only transfer radiatively. During tropical buoy deployments with long data uplink transmit times, there is a risk of exceeding the Iridium module's max operational temperature.</li>
+        <li><strong>Flash memory corruption:</strong> SD cards will corrupt while in LEO due to ionizing radiation. This causes unexpected read/write faults, which can prevent the flight computer from booting flight software and running operations.</li>
+        <li><strong>Voltage regulator failure:</strong> DC-DC converters are sensitive to ionizing radiation and can fail unpredictably, cutting power to all systems.</li>
       </ul>
     </div>
 
     <div class="challenge-block challenge-solution">
       <div class="challenge-label">Solutions</div>
       <ul>
-        <li><strong>RF switch:</strong> A high isolation, low insertion loss RF switch was added between the GNSS antenna and front-end to protect the module from RF emissions during Iridium transmission. The switch is opened by the Iridium modem while it's transmitting. Low insertion loss of 0.7 dB ensures a passive GNSS antenna will still close the link budget.</li>
-        <li><strong>Vertical wide-beamwidth antennas:</strong> A link budget calculation informed selection of antennas. The minimum side-lobe gain at the maximum tilt expected on deployed buoys was determined for both GNSS and Iridium RF systems. Antennas were mounted side-by-side on SMA bulkheads for easy installation given space constraints.</li>
-        <li><strong>Thermal strap:</strong> Copper pads with exposed soldermask were added to the top and bottom layers. Vias transfer heat from all layers to these pads, placed near the highest-power regulator and the Iridium module — the two components expected to dissipate the most heat.</li>
+        <li><strong>Dual watchdogs:</strong> In the event of a non-destructive single event latch-up that halts the flight computer, both the external electrical power system board or onboard hardware watchdog can trigger a reboot.</li>
+        <li><strong>Remote reboot:</strong> The primary radio can toggle which compute module is running with a command from ground, regardless of the flight computer's state.</li>
+        <li><strong>FDIR system:</strong> Two Raspberry Pi compute modules connected to four SD cards plus the FDIR system create a single-fault tolerant system that can autonomously recover from unexpected shutdowns.</li>
       </ul>
     </div>
   </section>
 
-  <section id="fabrication">
+  <section id="testing">
     <div class="section-head">
       <span class="section-num">05</span>
-      <h2>Fabrication Drawing</h2>
+      <h2>Testing</h2>
     </div>
     <div class="section-rule"></div>
-    <div class="doc-frame-full" id="fab-pages">
-      <div class="pdf-loading" data-loading-for="fab-pages">Loading fabrication drawing…</div>
+    <div class="assembly-stack">
+      <div class="assembly-frame">
+        <img src="electronics_bench_setup.jpg" alt="Electronics bench setup for BeaverCube Flight Computer testing">
+      </div>
+      <div class="assembly-frame">
+        <img src="analog_scope_test.jpg" alt="Analog oscilloscope test of BeaverCube Flight Computer power rail">
+      </div>
     </div>
-    <div class="render-caption">
-      <span>Iridium_Modem_SIO_Fabrication_Drawing.pdf</span>
-      <span><a class="full-size-link" href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Fabrication Drawing →</a></span>
-    </div>
-  </section>
+    <p class="section-intro" style="margin-top:20px;">Initial board checkout evaluating voltage ripple on the main power rail. Power resistors simulate passive loading. An Iwatsu SS-6122 100 MHz analog oscilloscope is used with probe input set to AC coupling.</p>
 
-  <section id="stackup">
-    <div class="section-head">
-      <span class="section-num">06</span>
-      <h2>Board Stackup</h2>
-    </div>
-    <div class="section-rule"></div>
-
-    <div class="stackup-stats">
-      <div class="stackup-stat">
-        <span class="k">Layers</span>
-        <span class="v">4</span>
+    <div class="assembly-stack" style="margin-top:40px;">
+      <div class="assembly-frame">
+        <img src="pcb_logic_analyzer_test.jpg" alt="Logic analyzer test of BeaverCube Flight Computer prototype board">
       </div>
-      <div class="stackup-stat">
-        <span class="k">Thickness</span>
-        <span class="v">1.6<small>mm</small></span>
+      <div class="assembly-frame">
+        <img src="pcb_rework_3.jpg" alt="PCB rework on BeaverCube Flight Computer prototype board">
       </div>
     </div>
-
-    <div class="stackup-cards">
-      <div class="stackup-card">
-        <div class="title">ENIG Finish</div>
-        <div class="desc">Optimal heat transfer between flush-mounted Iridium module and top layer copper pour</div>
-      </div>
-      <div class="stackup-card">
-        <div class="title">Full-Layer Copper Pour</div>
-        <div class="desc">Ground plane spanning all layers for reduced EMI</div>
-      </div>
-      <div class="stackup-card">
-        <div class="title">Controlled-Impedance CPW</div>
-        <div class="desc">Embedded 50-ohm coplanar waveguide for GNSS module antenna feed</div>
-      </div>
-    </div>
+    <p class="section-intro" style="margin-top:20px;">Logic analyzer test diagnosed missing USB net connections. PCB re-work involved cutting traces on the prototype board and soldering thin wires to pads smaller than an 0402 footprint.</p>
   </section>
 
   <section id="schematic">
     <div class="section-head">
-      <span class="section-num">07</span>
+      <span class="section-num">06</span>
       <h2>Schematic</h2>
     </div>
     <div class="section-rule"></div>
@@ -1079,23 +913,23 @@
       </div>
     </div>
     <div class="render-caption">
-      <span>Iridium_Modem_Schematic.pdf</span>
-      <span><a class="full-size-link" href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Schematic →</a></span>
+      <span>BFC_rev1_schematic.pdf</span>
+      <span><a class="full-size-link" href="BFC_rev1_schematic.pdf" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Schematic →</a></span>
     </div>
-    <div class="doc-notes doc-notes-below">
-      <h3>Feature notes</h3>
-      <div class="note-slot placeholder">
-        <span class="tag">Power stage</span>
-        TPS79330 LDO filters ADP2300 DC-DC converter output to isolate digital 3.3 V power rail from analog 3.0 V power
-      </div>
-      <div class="note-slot placeholder">
-        <span class="tag">GNSS front-end</span>
-        HMC550AETR RF switch protects L96-M33 front-end during Iridium transmission
-      </div>
-      <div class="note-slot placeholder">
-        <span class="tag">Antenna feed</span>
-        R14, C26, and C27 form a π-network that can be tuned to match antenna and front-end impedance
-      </div>
+  </section>
+
+  <section id="block-diagram">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2>Hardware Block Diagram</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="render-frame">
+      <img src="BFC_block_diagram.png" alt="BeaverCube Flight Computer hardware block diagram" loading="lazy">
+    </div>
+    <div class="render-caption">
+      <span>BFC_block_diagram.png</span>
+      <span><a class="full-size-link" href="BFC_block_diagram.png" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Diagram →</a></span>
     </div>
   </section>
 
@@ -1108,61 +942,76 @@
     <div class="render-stack">
       <div>
         <div class="render-frame" id="render-frame-1">
-          <img src="Iridium_Modem_3D_Render_1.jpg" alt="Iridium Modem SIO board render — view 1" loading="lazy">
+          <img src="BFC_render_top.png" alt="BeaverCube Flight Computer board render — top" loading="lazy">
         </div>
         <div class="render-caption">
-          <span>Iridium_Modem_3D_Render_1.jpg</span>
-          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_1.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
+          <span>BFC_render_top.png</span>
+          <span><a class="full-size-link" href="BFC_render_top.png" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
         </div>
       </div>
       <div>
         <div class="render-frame" id="render-frame-2">
-          <img src="Iridium_Modem_3D_Render_2.jpg" alt="Iridium Modem SIO board render — view 2" loading="lazy">
+          <img src="BFC_render_bot.png" alt="BeaverCube Flight Computer board render — bottom" loading="lazy">
         </div>
         <div class="render-caption">
-          <span>Iridium_Modem_3D_Render_2.jpg</span>
-          <span><a class="full-size-link" href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
+          <span>BFC_render_bot.png</span>
+          <span><a class="full-size-link" href="BFC_render_bot.png" target="_blank" rel="noopener" style="color:var(--accent-dim);">Open Render →</a></span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="paper">
+    <div class="section-head">
+      <span class="section-num">09</span>
+      <h2>SmallSat Conference Paper</h2>
+    </div>
+    <div class="section-rule"></div>
+    <div class="res-grid" style="grid-template-columns: 1fr;">
+      <a class="res-item" href="Open_Source_Flight_Computer_C_Lindsay_E_Sit.pdf" target="_blank" rel="noopener">
+        <span class="rk">Open-Source Flight Computer Platform for CubeSats</span>
+        <span class="rv">Open_Source_Flight_Computer_C_Lindsay_E_Sit.pdf</span>
+      </a>
     </div>
   </section>
 
   <section id="resources">
     <div class="section-head">
-      <span class="section-num">09</span>
+      <span class="section-num">10</span>
       <h2>Project Files</h2>
     </div>
     <div class="section-rule"></div>
     <div class="res-grid">
-      <a class="res-item" href="Iridium_Modem_Schematic.pdf" target="_blank" rel="noopener">
+      <a class="res-item" href="https://github.com/MIT-STARLab/BeaverCube_Flight_Computer" target="_blank" rel="noopener">
+        <span class="rk">Open-Source Board Files</span>
+        <span class="rv">MIT-STARLab/BeaverCube_Flight_Computer</span>
+      </a>
+      <a class="res-item" href="BFC_rev1_schematic.pdf" target="_blank" rel="noopener">
         <span class="rk">Schematic</span>
-        <span class="rv">Iridium_Modem_Schematic.pdf</span>
+        <span class="rv">BFC_rev1_schematic.pdf</span>
       </a>
-      <a class="res-item" href="Iridium_Modem_SIO_Fabrication_Drawing.pdf" target="_blank" rel="noopener">
-        <span class="rk">Fabrication Drawing</span>
-        <span class="rv">Fabrication_Drawing.pdf</span>
-      </a>
-      <a class="res-item" href="Iridium_Modem_3D_Render_1.jpg" target="_blank" rel="noopener">
+      <a class="res-item" href="BFC_render_top.png" target="_blank" rel="noopener">
         <span class="rk">Board Render (top)</span>
-        <span class="rv">3D_Render_1.jpg</span>
+        <span class="rv">BFC_render_top.png</span>
       </a>
-      <a class="res-item" href="Iridium_Modem_3D_Render_2.jpg" target="_blank" rel="noopener">
+      <a class="res-item" href="BFC_render_bot.png" target="_blank" rel="noopener">
         <span class="rk">Board Render (bottom)</span>
-        <span class="rv">3D_Render_2.jpg</span>
+        <span class="rv">BFC_render_bot.png</span>
       </a>
-      <a class="res-item" href="Iridium_Modem_BOM.xls" target="_blank" rel="noopener">
+      <a class="res-item" href="BFC_BOM.xlsx" target="_blank" rel="noopener">
         <span class="rk">Bill of Materials</span>
-        <span class="rv">Iridium_Modem_BOM.xls</span>
+        <span class="rv">BFC_BOM.xlsx</span>
       </a>
-      <a class="res-item" href="iridium_modem_SIO_gerber.zip" target="_blank" rel="noopener">
+      <a class="res-item" href="BFC_gerber.zip" target="_blank" rel="noopener">
         <span class="rk">Manufacturing Files</span>
-        <span class="rv">iridium_modem_SIO_gerber.zip</span>
+        <span class="rv">BFC_gerber.zip</span>
       </a>
     </div>
   </section>
 
   <footer>
-    <span>Iridium Modem SIO</span>
+    <span>BeaverCube Flight Computer — MIT STAR Lab</span>
+    <span>Charles Lindsay, Ethan Sit</span>
   </footer>
 
 </main>
@@ -1208,9 +1057,10 @@
     }
   }
 
-  renderPdfIntoContainer('Iridium_Modem_Schematic.pdf', 'schematic-pages', { targetWidth: 1600 });
-  renderPdfIntoContainer('Iridium_Modem_SIO_Fabrication_Drawing.pdf', 'fab-pages', { singlePage: true, targetWidth: 1600 });
+  renderPdfIntoContainer('BFC_rev1_schematic.pdf', 'schematic-pages', { targetWidth: 1600 });
+</script>
 
+<script>
   // Highlight active rail item on scroll
   const sections = document.querySelectorAll('main section[id]');
   const railItems = document.querySelectorAll('.rail-item');
