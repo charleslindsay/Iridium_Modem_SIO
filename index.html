@@ -880,7 +880,7 @@
     <div class="hero-eyebrow">Open ocean buoy communications module</div>
     <h1>Iridium Modem <span>SIO</span></h1>
     <p class="hero-sub">
-      A satellite modem with integrated GNSS for reliable data and position uplink on offshore ocean buoys
+      A satellite modem with integrated GNSS module for reliable data and position uplink from offshore ocean buoys
     </p>
     <p class="hero-note">Developed at the Scripps Institution of Oceanography (SIO)</p>
     <p class="hero-author">Charles Lindsay — <a href="mailto:chlindsay@ucsd.edu">chlindsay@ucsd.edu</a></p>
@@ -894,8 +894,8 @@
         <span class="v">GPS, Galileo, GLONASS</span>
       </div>
       <div class="hero-meta-item">
-        <span class="k">Hardware Design</span>
-        <span class="v"><a href="https://github.com/charleslindsay/Iridium_Modem_SIO" style="color:inherit;text-decoration:none;">github.com/charleslindsay/Iridium_Modem_SIO</a></span>
+        <span class="k">External Controller</span>
+        <span class="v">ARM microcontroller</span>
       </div>
     </div>
   </section>
@@ -906,7 +906,7 @@
       <h2>In the Field</h2>
     </div>
     <div class="section-rule"></div>
-    <p class="section-intro">Modem integrated into a datalogging buoy on its way to a deployment in the North Pacific ~250 km offshore. Successfully transmitted data and position for 9 months at sea.</p>
+    <p class="section-intro">Modem integrated into a datalogging buoy on its way to a deployment in the North Pacific 250 km offshore. Successfully transmitted data and position for 9 months at sea.</p>
     <div class="photo-gallery">
       <div class="photo-gallery-main">
         <img src="iridium_modem_on_buoy.png" alt="Iridium Modem SIO installed on ocean buoy" loading="lazy">
@@ -942,7 +942,7 @@
           <div class="spec-group-title">Power</div>
           <ul class="spec-list">
             <li>Wide input voltage range (5 – 20 V)</li>
-            <li>Jumpers to selectively disable devices for low-power operation</li>
+            <li>Jumpers to selectively disable onboard ICs for low-power operation</li>
           </ul>
         </div>
         <div class="spec-group">
@@ -972,7 +972,7 @@
               </ul>
             </li>
             <li>Cold start &lt; 45 s | warm start &lt; 20 s</li>
-            <li>Active or passive GPS antenna</li>
+            <li>Active or passive antenna compatible</li>
           </ul>
         </div>
       </div>
@@ -994,23 +994,23 @@
     <div class="challenge-block challenge-problem">
       <div class="challenge-label">RF Problem</div>
       <ul>
-        <li><strong>Interference:</strong> Pressure vessel diameter &lt; λ/2 results in antenna coupling and RF power leakage into GNSS front-end.</li>
-        <li><strong>Directionality:</strong> Unpredictable wave motion means antenna orientation changes constantly.</li>
+        <li><strong>Interference:</strong> Pressure vessel diameter &lt; λ/2 means GNSS and Iridium antennas will be strongly coupled, risking RF power leakage into the GNSS front-end.</li>
+        <li><strong>Directionality:</strong> Unpredictable wave motion means antenna orientation will be changing constantly.</li>
       </ul>
     </div>
 
     <div class="challenge-block challenge-problem">
       <div class="challenge-label">Thermal Problem</div>
       <ul>
-        <li><strong>Heat dissipation:</strong> Vacuum-sealed means heat will only transfer radiatively. During tropical buoy deployments with long uplink connect times, there is a risk of exceeding the Iridium module's max operational temperature.</li>
+        <li><strong>Heat dissipation:</strong> Vacuum-sealed means heat will only transfer radiatively. During tropical buoy deployments with long data uplink transmit times, there is a risk of exceeding the Iridium module's max operational temperature.</li>
       </ul>
     </div>
 
     <div class="challenge-block challenge-solution">
       <div class="challenge-label">Solutions</div>
       <ul>
-        <li><strong>RF switch:</strong> Protects GNSS front-end during Iridium transmission with 12 dB isolation between the external antenna and module. Low insertion loss of 0.7 dB ensures a passive antenna is still compatible with the system.</li>
-        <li><strong>Vertical wide-beamwidth antennas:</strong> The side-lobe gain at the maximum tilt expected on deployed buoys is sufficient to close the link budget for both GNSS and Iridium. Antennas are mounted side-by-side on SMA bulkheads for easy installation.</li>
+        <li><strong>RF switch:</strong> A high isolation, low insertion loss RF switch was added between the GNSS antenna and front-end to protect the module from RF emissions during Iridium transmission. The switch is opened by the Iridium modem while it's transmitting. Low insertion loss of 0.7 dB ensures a passive GNSS antenna will still close the link budget.</li>
+        <li><strong>Vertical wide-beamwidth antennas:</strong> A link budget calculation informed selection of antennas. The minimum side-lobe gain at the maximum tilt expected on deployed buoys was determined for both GNSS and Iridium RF systems. Antennas were mounted side-by-side on SMA bulkheads for easy installation given space constraints.</li>
         <li><strong>Thermal strap:</strong> Copper pads with exposed soldermask were added to the top and bottom layers. Vias transfer heat from all layers to these pads, placed near the highest-power regulator and the Iridium module — the two components expected to dissipate the most heat.</li>
       </ul>
     </div>
@@ -1052,7 +1052,7 @@
     <div class="stackup-cards">
       <div class="stackup-card">
         <div class="title">ENIG Finish</div>
-        <div class="desc">Optimal heat transfer between flush-mounted Iridium module and thermal strap</div>
+        <div class="desc">Optimal heat transfer between flush-mounted Iridium module and top layer copper pour</div>
       </div>
       <div class="stackup-card">
         <div class="title">Full-Layer Copper Pour</div>
